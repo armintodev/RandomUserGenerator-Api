@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UserGenerator.Api.Data;
+using UserGenerator.Api.Data.Implementations;
+using UserGenerator.Api.Data.Repositories;
 
 namespace UserGenerator.Api.Extensions
 {
@@ -31,6 +33,11 @@ namespace UserGenerator.Api.Extensions
                 options.LoginPath = "account/login";
                 options.LogoutPath = "account/logout";
             });
+        }
+
+        public static void AddLifeCycles(this IServiceCollection service)
+        {
+            service.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }
