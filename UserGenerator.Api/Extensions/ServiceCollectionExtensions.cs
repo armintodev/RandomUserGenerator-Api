@@ -35,7 +35,7 @@ namespace UserGenerator.Api.Extensions
             });
         }
 
-        public static void AddLifeCycles(this IServiceCollection service)
+        public static void AddApplicationLifeCycles(this IServiceCollection service)
         {
             service.AddScoped<IUserRepository, UserRepository>();
         }
