@@ -19,27 +19,38 @@ namespace UserGenerator.Api.Data.Implementations
 
         public async Task<List<CreateUserResult>> Get()
         {
-            return await _context.Users.AsNoTracking().Select(sel => new CreateUserResult(sel.Id.ToString(), sel.UserName, sel.Email)).ToListAsync();
+            return await _context.Users.AsNoTracking().Select(sel => new CreateUserResult(Convert.ToInt32(sel.Id), sel.UserName, sel.Email)).ToListAsync();
         }
 
         public async Task<List<CreateUserResult>> Get(int query)
         {
-            var list = _context.Users.Select(sel => new CreateUserResult(sel.Id.ToString(), sel.UserName, sel.Email)).Take(query);
+            var list = _context.Users.Select(sel => new CreateUserResult(Convert.ToInt32(sel.Id), sel.UserName, sel.Email)).Take(query);
             return await list.ToListAsync();
         }
 
         public async Task<CreateUserResult> Get(string key)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
-
-            return await _context.Users.Select(sel => new CreateUserResult(sel.Id.ToString(), sel.UserName, sel.Email))
-                .FirstOrDefaultAsync(f => f.Id.ToString() == key);
+            var id = Convert.ToInt32(key);
+            return await _context.Users.Select(sel => new CreateUserResult(id, sel.UserName, sel.Email))
+                .FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task Add(CreateUserCommand command)
+        public async Task Add(CreateUserResult result)
         {
-            IdentityUser<int> user = new(command.UserName);
+            IdentityUser user = new(result.UserName);
             await _context.Users.AddAsync(user).ConfigureAwait(false);
+        }
+
+        public async Task AddRangeAsync(IEnumerable<CreateUserResult> results)
+        {
+            List<IdentityUser> users = new();
+            foreach (var result in results)
+            {
+                users.Add(new IdentityUser(result.UserName));
+            }
+
+            await _context.Users.AddRangeAsync(users);
         }
 
         public async Task Delete(string key)

@@ -4,12 +4,13 @@ using UserGenerator.Api.DTOs;
 
 namespace UserGenerator.Api.Data.Repositories
 {
-    interface IUserRepository
+    public interface IUserRepository
     {
         Task<List<CreateUserResult>> Get();
         Task<List<CreateUserResult>> Get(int query);
         Task<CreateUserResult> Get(string key);
-        Task Add(CreateUserCommand command);
+        Task Add(CreateUserResult result);
+        Task AddRangeAsync(IEnumerable<CreateUserResult> results);
         Task Delete(string key);
         Task SaveAsync();
     }
