@@ -2,8 +2,6 @@
 {
     public record CreateUserCommand
     {
-        public string UserName { get; init; }
-        public string Email { get; init; }
-        public string Request { get; init; }
+        public int Request { get; set; }
     };
 }
