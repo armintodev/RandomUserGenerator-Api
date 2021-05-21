@@ -4,5 +4,6 @@
     {
         public int Request { get; set; }
         public int Skip { get; set; }
+        public string Password { get; set; }
     };
 }
