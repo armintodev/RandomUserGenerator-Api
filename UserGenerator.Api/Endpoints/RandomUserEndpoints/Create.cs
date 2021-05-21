@@ -36,7 +36,7 @@ namespace UserGenerator.Api.Endpoints.RandomUserEndpoints
                     {
                         client = new();
                         response = await client.SendAsync(i);
-                        responses.Add(response);
+                        responses.Add(new CreateUserResult(response.Id, response.UserName, response.Email, request.Password));
                     }
 
                 else
