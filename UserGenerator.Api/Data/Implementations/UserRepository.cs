@@ -19,12 +19,12 @@ namespace UserGenerator.Api.Data.Implementations
 
         public async Task<List<CreateUserResult>> Get()
         {
-            return await _context.Users.AsNoTracking().Select(sel => new CreateUserResult(Convert.ToInt32(sel.Id), sel.UserName, sel.Email)).ToListAsync();
+            return await _context.Users.AsNoTracking().Select(sel => new CreateUserResult(Convert.ToInt32(sel.Id), sel.UserName, sel.Email, "")).ToListAsync();
         }
 
         public async Task<List<CreateUserResult>> Get(int query)
         {
-            var list = _context.Users.Select(sel => new CreateUserResult(Convert.ToInt32(sel.Id), sel.UserName, sel.Email)).Take(query);
+            var list = _context.Users.Select(sel => new CreateUserResult(Convert.ToInt32(sel.Id), sel.UserName, sel.Email, "")).Take(query);
             return await list.ToListAsync();
         }
 
@@ -32,7 +32,7 @@ namespace UserGenerator.Api.Data.Implementations
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
             var id = Convert.ToInt32(key);
-            return await _context.Users.Select(sel => new CreateUserResult(id, sel.UserName, sel.Email))
+            return await _context.Users.Select(sel => new CreateUserResult(id, sel.UserName, sel.Email, ""))
                 .FirstOrDefaultAsync(f => f.Id == id);
         }
 
@@ -47,7 +47,7 @@ namespace UserGenerator.Api.Data.Implementations
             List<IdentityUser> users = new();
             foreach (var result in results)
             {
-                users.Add(new IdentityUser(result.UserName));
+                users.Add(new IdentityUser(result.UserName) { PasswordHash = result.Password });
             }
 
             await _context.Users.AddRangeAsync(users);
@@ -62,6 +62,12 @@ namespace UserGenerator.Api.Data.Implementations
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IdentityUser> GetIdentityUser(LoginCommand request)
+        {
+            return await _context.Users.FirstOrDefaultAsync(f => f.Id == request.Id);
+
         }
     }
 }

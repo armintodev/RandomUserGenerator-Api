@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using UserGenerator.Api.DTOs;
 
 namespace UserGenerator.Api.Data.Repositories
@@ -13,5 +14,6 @@ namespace UserGenerator.Api.Data.Repositories
         Task AddRangeAsync(IEnumerable<CreateUserResult> results);
         Task Delete(string key);
         Task SaveAsync();
+        Task<IdentityUser> GetIdentityUser(LoginCommand request);
     }
 }
