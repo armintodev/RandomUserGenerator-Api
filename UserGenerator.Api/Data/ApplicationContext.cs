@@ -24,7 +24,6 @@ namespace UserGenerator.Api.Data
                 .Ignore(ig => ig.TwoFactorEnabled);
 
             builder.Ignore<IdentityUserLogin<string>>();
-            builder.Ignore<IdentityUserClaim<string>>();
             builder.Ignore<IdentityUserToken<string>>();
             builder.Ignore<IdentityRoleClaim<string>>();
         }
